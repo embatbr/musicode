@@ -13,7 +13,7 @@ class Note(object):
         'B': 15/8
     }
     ACCIDENTALS = ('b', '', '#')
-    FIRST_OCTAVE_RANGE = (33, 61.875)
+    ZEROTH_OCTAVE_RANGE = (16.5, 30.9375)
 
     def __init__(self, name, accidental='', octave=4):
         if name not in Note.FREQUENCY_FACTOR.keys():
@@ -24,8 +24,6 @@ class Note(object):
             raise Exception("Note accidental doesn't exist")
         self.accidental = accidental
 
-        if octave < 1 or octave > 8:
-            raise Exception('Octave out of range')
         self.octave = octave
 
     def __str__(self):
@@ -41,12 +39,21 @@ class Note(object):
 
         return '%s %s in octave %d' % (self.name, accidental_name, self.octave)
 
+    def shift_octave(self, offset):
+        return Note(self.name, self.accidental, self.octave + offset)
+
+    def octave_up(self):
+        return shift_octave(1)
+
+    def octave_down(self):
+        return shift_octave(-1)
+
     @property
     def frequency(self):
         factor = Note.FREQUENCY_FACTOR[self.name]
 
-        first_octave_C = Note.FIRST_OCTAVE_RANGE[0]
-        frequency = first_octave_C * factor * 2**(self.octave - 1)
+        first_octave_C = Note.ZEROTH_OCTAVE_RANGE[0]
+        frequency = first_octave_C * factor * 2**self.octave
 
         if self.accidental == 'b':
             frequency = (frequency * 15) / 16

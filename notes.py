@@ -1,26 +1,27 @@
 # -*- coding: utf-8 -*-
 
 
+FREQUENCY_FACTOR = {
+    'C': 1,
+    'D': 9/8,
+    'E': 5/4,
+    'F': 4/3,
+    'G': 3/2,
+    'A': 5/3,
+    'B': 15/8
+}
+ACCIDENTALS = ('b', '', '#')
+ZEROTH_OCTAVE_RANGE = (16.5, 30.9375)
+
+
 class Note(object):
 
-    FREQUENCY_FACTOR = {
-        'C': 1,
-        'D': 9/8,
-        'E': 5/4,
-        'F': 4/3,
-        'G': 3/2,
-        'A': 5/3,
-        'B': 15/8
-    }
-    ACCIDENTALS = ('b', '', '#')
-    ZEROTH_OCTAVE_RANGE = (16.5, 30.9375)
-
     def __init__(self, name, accidental='', octave=4):
-        if name not in Note.FREQUENCY_FACTOR.keys():
+        if name not in FREQUENCY_FACTOR.keys():
             raise Exception("Note name doesn't exist")
         self.name = name
 
-        if accidental not in Note.ACCIDENTALS:
+        if accidental not in ACCIDENTALS:
             raise Exception("Note accidental doesn't exist")
         self.accidental = accidental
 
@@ -39,8 +40,11 @@ class Note(object):
 
         return '%s %s in octave %d' % (self.name, accidental_name, self.octave)
 
+    def change_octave(self, octave):
+        return Note(self.name, self.accidental, octave)
+
     def shift_octave(self, offset):
-        return Note(self.name, self.accidental, self.octave + offset)
+        return change_octave(self.octave + offset)
 
     def octave_up(self):
         return shift_octave(1)
@@ -50,9 +54,9 @@ class Note(object):
 
     @property
     def frequency(self):
-        factor = Note.FREQUENCY_FACTOR[self.name]
+        factor = FREQUENCY_FACTOR[self.name]
 
-        first_octave_C = Note.ZEROTH_OCTAVE_RANGE[0]
+        first_octave_C = ZEROTH_OCTAVE_RANGE[0]
         frequency = first_octave_C * factor * 2**self.octave
 
         if self.accidental == 'b':

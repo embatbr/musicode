@@ -31,14 +31,7 @@ class Note(object):
         return '%s%s' % (self.name, self.accidental)
 
     def __repr__(self):
-        options = {
-            'b': 'flat',
-            '': 'natural',
-            '#': 'sharp'
-        }
-        accidental_name = options[self.accidental]
-
-        return '%s %s in octave %d' % (self.name, accidental_name, self.octave)
+        return '%d%s%s' % (self.octave, self.name, self.accidental)
 
     def change_octave(self, octave):
         return Note(self.name, self.accidental, octave)

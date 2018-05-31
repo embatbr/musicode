@@ -64,6 +64,14 @@ class DiatonicScale(object):
     def mode_scale(mode):
         return DiatonicScale(DiatonicScale.MODES_INTERVALS[mode])
 
+    @staticmethod
+    def major_scale():
+        return DiatonicScale.mode_scale('ionian')
+
+    @staticmethod
+    def minor_scale():
+        return DiatonicScale.mode_scale('aeolian')
+
     # TODO check when accidental is flat
     def note_scale_with_octave(self, name, accidental='', octave=4):
         scale = list()
